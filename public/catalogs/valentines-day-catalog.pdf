@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module">import { injectIntoGlobalHook } from "/@react-refresh";
+injectIntoGlobalHook(window);
+window.$RefreshReg$ = () => {};
+window.$RefreshSig$ = () => (type) => type;</script>
+
+    <script src="https://miaoda-resource-static.s3cdn.medo.dev/common/v2/injected.js?parentOrigin=*"></script>
+
+    <script type="module" src="/@vite/client"></script>
+
+    <script id="sentry-sdk" src="https://miaoda-resource-static.s3cdn.medo.dev/sentry/browser.sentry.min.js" crossorigin="anonymous"></script>
+    <script id="sentry-init">
+              (function() {
+                // 此时 Sentry SDK 已经同步加载完成
+                if (typeof Sentry === 'undefined') {
+                  console.error('[Monitor Plugin] Sentry SDK not loaded');
+                  return;
+                }
+                
+                try {
+                  // 初始化 Sentry
+                  Sentry.init({
+                    dsn: 'https://e3c07b90fcb5207f333d50ac24a99d3e@sentry.miaoda.cn/233',
+                    environment: 'undefined',
+                    
+                    
+                    // 集成配置
+                    integrations: [
+                      
+          Sentry.breadcrumbsIntegration({
+            console: false,
+            fetch: false,
+            xhr: false,
+            dom: true,
+            history: true,
+            sentry: true
+          })
+        
+                    ],
+                    
+                    // 其他配置
+                    sendDefaultPii: true,
+                    beforeSend: function(event, hint) {
+                      // 保留 extra 中的敏感数据，防止被 Sentry 自动脱敏
+                      if (event.extra) {
+                        // 确保 requestBody 和 responseBody 不被脱敏
+                        if (event.extra.requestBody !== undefined) {
+                          event.extra.requestBody = event.extra.requestBody;
+                        }
+                        if (event.extra.responseBody !== undefined) {
+                          event.extra.responseBody = event.extra.responseBody;
+                        }
+                        if (event.extra.url !== undefined) {
+                          event.extra.url = event.extra.url;
+                        }
+                      }
+                      
+                      // 保留 breadcrumbs 中的 URL 信息
+                      if (event.breadcrumbs) {
+                        event.breadcrumbs = event.breadcrumbs.map(function(breadcrumb) {
+                          if (breadcrumb.data && breadcrumb.data.url) {
+                            breadcrumb.data.url = breadcrumb.data.url;
+                          }
+                          return breadcrumb;
+                        });
+                      }
+                      
+                      return event;
+                    },
+                    
+                    // 禁用默认的数据清理器，防止自动脱敏
+                    beforeBreadcrumb: function(breadcrumb, hint) {
+                      // 保留所有 breadcrumb 数据
+                      return breadcrumb;
+                    }
+                  });
+
+                  // 设置自定义标签
+                  Sentry.setTag('app_id', 'app-93a4xgnxzu2p');
+                Sentry.setTag('environment', 'undefined');
+                  
+                  // 监听全局未捕获的错误（包括资源加载错误）
+                  window.addEventListener('error', function(event) {
+                    try {
+                       // 发送错误信息给父窗口
+                      window.parent.postMessage(
+                        {
+                          type: 'GLOBAL_ERROR',
+                          error: event.error,
+                          message: event.message,
+                          // 提取 Error 对象的关键属性
+                          errorData: {
+                            name: event.error?.name,
+                            message: event.error?.message || event.message,
+                            stack: event.error?.stack,
+                            fileName: event.filename,
+                            lineNumber: event.lineno,
+                            columnNumber: event.colno
+                          }
+                        },
+                        '*'
+                      );
+
+                      // 检查是否是资源加载错误
+                      if (event.target && (event.target.tagName === 'IMG' || event.target.tagName === 'SCRIPT' || event.target.tagName === 'LINK')) {
+                        const target = event.target;
+                        const resourceUrl = target.src || target.href || 'unknown';
+                        const formattedMessage = '[error]Failed to load resource: ' + resourceUrl;
+                        
+                        Sentry.captureEvent({
+                          message: formattedMessage,
+                          level: 'error',
+                          fingerprint: ['resource-error', resourceUrl],
+                          extra: {
+                            consoleType: 'error',
+                            resourceType: target.tagName,
+                            resourceUrl: resourceUrl
+                          }
+                        });
+                        return;
+                      }
+                      
+                      // 处理脚本错误
+                      const errorMessage = event.message || 'Unknown error';
+                      const errorSource = event.filename || 'unknown';
+                      const errorLine = event.lineno || 0;
+                      const errorCol = event.colno || 0;
+                      const errorObj = event.error;
+                      
+                      let formattedMessage = '[error]' + errorMessage;
+                      if (errorSource !== 'unknown') {
+                        formattedMessage += ' at ' + errorSource + ':' + errorLine + ':' + errorCol;
+                      }
+                      
+                      const extraData = {
+                        consoleType: 'error',
+                        source: errorSource,
+                        line: errorLine,
+                        column: errorCol
+                      };
+                      
+                      if (errorObj && errorObj.stack) {
+                        formattedMessage += '\n' + errorObj.stack;
+                        extraData.stack = errorObj.stack;
+                        extraData.errorName = errorObj.name;
+                        extraData.errorMessage = errorObj.message;
+                      }
+                      
+                      Sentry.captureEvent({
+                        message: formattedMessage,
+                        level: 'error',
+                        fingerprint: ['global-error', errorMessage],
+                        extra: extraData
+                      });
+                    } catch (error) {
+                      console.warn('[Monitor Plugin] Failed to handle window error:', error);
+                    }
+                  }, true); // 使用捕获阶段来捕获资源加载错误
+                  
+                  // 监听未处理的 Promise 拒绝
+                  window.addEventListener('unhandledrejection', function(event) {
+                    try {
+                      const reason = event.reason;
+                      let message = '[error]Unhandled Promise Rejection: ';
+                      
+                      if (reason instanceof Error) {
+                        message += reason.name + ': ' + reason.message;
+                        if (reason.stack) {
+                          message += '\n' + reason.stack;
+                        }
+                      } else {
+                        message += String(reason);
+                      }
+                    
+                      Sentry.captureEvent({
+                        message: message,
+                        level: 'error',
+                        fingerprint: ['unhandled-rejection', String(reason)],
+                        extra: {
+                          consoleType: 'error',
+                          reason: reason instanceof Error ? {
+                            name: reason.name,
+                            message: reason.message,
+                            stack: reason.stack
+                          } : reason
+                        }
+                      });
+                    } catch (error) {
+                      console.warn('[Monitor Plugin] Failed to handle unhandled rejection:', error);
+                    }
+                  });
+                  
+                  // 手动拦截 console 方法，每条日志立即上报
+                  
+                  // 需要过滤的日志关键字列表
+                  const consoleFilterKeywords = [
+                    'Sentry initialized successfully',
+                    '[vite] ',
+                    'Download the React DevTools for a better development experience'
+                  ];
+                  
+                  // 检查日志是否应该被过滤
+                  const shouldFilterConsoleLog = function(args) {
+                    if (consoleFilterKeywords.length === 0) return false;
+                    
+                    // 将所有参数转换为字符串并合并
+                    const logText = args.map(function(arg) {
+                      if (typeof arg === 'string') return arg;
+                      if (arg instanceof Error) return arg.message;
+                      try {
+                        return JSON.stringify(arg);
+                      } catch (e) {
+                        return String(arg);
+                      }
+                    }).join(' ');
+                    
+                    // 检查是否包含任何过滤关键字
+                    return consoleFilterKeywords.some(function(keyword) {
+                      return logText.indexOf(keyword) !== -1;
+                    });
+                  };
+                  
+                  const consoleTypes = ['log', 'info', 'warn', 'error', 'debug'];
+                  consoleTypes.forEach(function(type) {
+                    const original = console[type];
+                    if (!original) return;
+                    
+                    console[type] = function() {
+                      // 调用原始方法
+                      original.apply(console, arguments);
+                      
+                      const args = Array.prototype.slice.call(arguments);
+                      
+                      // 检查是否应该过滤此日志
+                      if (shouldFilterConsoleLog(args)) {
+                        return;
+                      }
+
+                      const stacks = [];
+                      // 序列化参数
+                      const serializedArgs = args.map(function(arg) {
+                        if (arg instanceof Error) {
+                          // 如果有 stack，单独收集
+                          if (arg.stack) {
+                            stacks.push(arg.stack);
+                          }
+                          // Error 对象序列化为 JSON
+                          try {
+                            return JSON.stringify({
+                              name: arg.name,
+                              message: arg.message
+                            });
+                          } catch (e) {
+                            return String(arg);
+                          }
+                        } else if (typeof arg === 'object' && arg !== null) {
+                          try {
+                            return JSON.stringify(arg);
+                          } catch (e) {
+                            return String(arg);
+                          }
+                        }
+                        return String(arg);
+                      });
+                      
+                      // 第一个参数作为主消息文本
+                      const messageText = serializedArgs.length > 0 ? serializedArgs[0] : '';
+                      
+                      // 格式：[type]message
+                      const formattedMessage = '[' + type + ']' + messageText;
+                      
+                      // 根据类型设置不同的级别
+                      let level = 'info';
+                      if (type === 'error') level = 'error';
+                      else if (type === 'warn') level = 'warning';
+                      else if (type === 'debug') level = 'debug';
+                      
+                      // 构建 extra 数据
+                      const extraData = {
+                        consoleType: type,
+                        message: serializedArgs.join(' ')
+                      };
+                      
+                      // 如果有 stack，添加到 extra
+                      if (stacks.length > 0) {
+                        extraData.stack = stacks.join('\n\n');
+                      }
+                      
+                      // 自定义breadcrumb，包含consoleType、message、stack
+                      Sentry.addBreadcrumb({
+                        category: 'console',
+                        message: formattedMessage,
+                        level: level,
+                        data: {
+                          consoleType: type,
+                          message: serializedArgs.join(' '),
+                          stack: stacks.length > 0 ? stacks.join('\n\n') : undefined
+                        }
+                      });
+                      
+                      Sentry.captureEvent({
+                        message: formattedMessage,
+                        level: level,
+                        fingerprint: ['console', type, messageText],
+                        tags: {
+                          type: 'console'
+                        },
+                        extra: extraData
+                      });
+                    };
+                  });
+                  
+                  
+                  // 工具函数
+                  const truncateBody = function(body, limit) {
+                    limit = limit || 2000;
+                    return body.length > limit ? body.slice(0, limit) + '... (truncated)' : body;
+                  };
+                  
+                  const serializeBody = function(body) {
+                    if (!body) return undefined;
+                    if (typeof body === 'string') return truncateBody(body);
+                    if (body instanceof URLSearchParams) return truncateBody(body.toString());
+                    if (body instanceof FormData) {
+                      const parts = [];
+                      body.forEach(function(value, key) {
+                        parts.push(key + '=' + value);
+                      });
+                      return truncateBody(parts.join('&'));
+                    }
+                    if (body instanceof Blob) return '[Blob size=' + body.size + ']';
+                    if (body instanceof ArrayBuffer) return '[ArrayBuffer bytes=' + body.byteLength + ']';
+                    if (ArrayBuffer.isView(body)) return '[TypedArray bytes=' + body.byteLength + ']';
+                    if (body instanceof ReadableStream) return '[ReadableStream]';
+                    try {
+                      return truncateBody(JSON.stringify(body));
+                    } catch (e) {
+                      return String(body);
+                    }
+                  };
+                  
+                  // 手动拦截 HTTP 请求
+                  
+                  const ignoreUrls = ["\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|map)$","\\.chunk\\.","/static/","/assets/"];
+                  
+                  const shouldIgnoreUrl = function(url) {
+                    return ignoreUrls.some(function(pattern) {
+                      try {
+                        return new RegExp(pattern).test(url);
+                      } catch (e) {
+                        return false;
+                      }
+                    });
+                  };
+                  
+                  // 拦截 fetch
+                  const originalFetch = window.fetch;
+                  window.fetch = async function(input, init) {
+                    const method = (init?.method || 'GET').toUpperCase();
+                    const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+                    const start = performance.now();
+                    let requestBody = serializeBody(init?.body ?? null);
+                    
+                    if (!requestBody && input instanceof Request) {
+                      try {
+                        const cloned = input.clone();
+                        const bodyText = await cloned.text();
+                        requestBody = truncateBody(bodyText);
+                      } catch (e) {
+                        requestBody = '[unreadable request body]';
+                      }
+                    }
+                    
+                    // 提取 URL 路径部分
+                    let urlPath = url;
+                    try {
+                      const urlObj = new URL(url, window.location.origin);
+                      urlPath = urlObj.pathname + urlObj.search + urlObj.hash;
+                    } catch (e) {
+                      // 如果解析失败，使用原始 URL
+                    }
+                    
+                    Sentry.addBreadcrumb({
+                      category: 'fetch',
+                      data: { url: url, method: method },
+                      level: 'info'
+                    });
+                    
+                    try {
+                      const response = await originalFetch(input, init);
+                      const duration = Math.round(performance.now() - start);
+                      
+                      if (shouldIgnoreUrl(url)) {
+                        return response;
+                      }
+                      
+                      // 检测是否为流式响应
+                      const contentType = response.headers.get('content-type') || '';
+                      const isStreamResponse = contentType.includes('text/event-stream') ||
+                                              contentType.includes('application/stream+json') ||
+                                              contentType.includes('text/plain; charset=utf-8') && url.includes('stream');
+                      
+                      let responseBody;
+                      if (isStreamResponse) {
+                        // 流式响应不读取 body，避免阻塞流
+                        responseBody = '[streaming response - not captured]';
+                      } else {
+                        try {
+                          const clone = response.clone();
+                          responseBody = truncateBody(await clone.text());
+                        } catch (e) {
+                          responseBody = '[unreadable response body]';
+                        }
+                      }
+                      // 自定义breadcrumb，包含message、requestBody、responseBody、duration
+                      const fetchMessage = 'Fetch ' + method + ' ' + urlPath + ' -> ' + response.status + ' (' + duration + 'ms)';
+                      
+                      Sentry.addBreadcrumb({
+                        category: 'fetch',
+                        message: fetchMessage,
+                        data: {
+                          url: url,
+                          method: method,
+                          status: response.status,
+                          duration: duration,
+                          requestBody: requestBody,
+                          responseBody: responseBody
+                        },
+                        level: response.ok ? 'info' : 'warning'
+                      });
+                      
+                      // 响应完成后上报，包含完整的请求和响应信息
+                      const isClientError = response.status >= 400 && response.status < 500;
+                      
+                      // 如果是 4xx 错误，发送给父窗口
+                      if (isClientError) {
+                        try {
+                          const messageData = {
+                            type: 'GLOBAL_ERROR',
+                            message: fetchMessage,
+                            error: null,
+                            errorData: {
+                              name: 'HTTPClientError',
+                              message: fetchMessage,
+                              stack: null,
+                              fileName: url,
+                              lineNumber: 0,
+                              columnNumber: 0,
+                              httpPath: urlPath,
+                              httpStatus: response.status,
+                              httpMethod: method,
+                              requestBody: requestBody || '',
+                              responseBody: responseBody || ''
+                            }
+                          };
+                          // window.parent.postMessage(messageData, '*');
+                        } catch (postError) {
+                          console.error('[Monitor Plugin] Failed to send fetch 4xx error:', postError);
+                        }
+                      }
+                      
+                      Sentry.captureEvent({
+                        message: fetchMessage,
+                        level: response.ok ? 'info' : 'warning',
+                        fingerprint: ['{{ default }}', method, url],
+                        tags: {
+                          type: 'network'
+                        },
+                        extra: {
+                          url: url,
+                          method: method,
+                          status: response.status,
+                          duration: duration,
+                          requestBody: requestBody,
+                          responseBody: responseBody
+                        }
+                      });
+                      
+                      return response;
+                    } catch (error) {
+                      
+                      // 立即发送网络错误给父窗口（在任何其他操作之前）
+                      (function() {
+                        try {
+                          const errorMessage = 'Fetch ' + method + ' ' + urlPath + ' failed: ' + String(error);
+                          const messageData = {
+                            type: 'GLOBAL_ERROR',
+                            message: errorMessage,
+                            error: error instanceof Error ? {
+                              name: error.name,
+                              message: error.message,
+                              stack: error.stack
+                            } : null,
+                            errorData: {
+                              name: error instanceof Error ? error.name : 'NetworkError',
+                              message: error instanceof Error ? error.message : String(error),
+                              stack: error instanceof Error ? error.stack : null,
+                              fileName: url,
+                              lineNumber: 0,
+                              columnNumber: 0,
+                              httpPath: urlPath,
+                              httpStatus: 0,
+                              httpMethod: method,
+                              requestBody: requestBody || '',
+                              responseBody: ''
+                            }
+                          };
+                          // window.parent.postMessage(messageData, '*');
+                        } catch (postError) {
+                          console.error('[Monitor Plugin] Failed to send network error:', postError);
+                        }
+                      })();
+                      
+                      if (shouldIgnoreUrl(url)) {
+                        throw error;
+                      }
+                      
+                      Sentry.captureException(error);
+                      Sentry.captureEvent({
+                        message: 'Fetch ' + method + ' ' + urlPath + ' failed with exception',
+                        level: 'error',
+                        fingerprint: ['{{ default }}', method, url, 'exception'],
+                        tags: {
+                          type: 'network'
+                        },
+                        extra: {
+                          url: url,
+                          method: method,
+                          requestBody: requestBody,
+                          error: String(error)
+                        }
+                      });
+                      throw error;
+                    }
+                  };
+                  
+                  // 拦截 XMLHttpRequest
+                  const OriginalXHR = window.XMLHttpRequest;
+                  function SentryXHR() {
+                    const xhr = new OriginalXHR();
+                    const self = this;
+                    
+                    self._url = '';
+                    self._method = 'GET';
+                    self._startTime = 0;
+                    self._requestBody = undefined;
+                    
+                    const originalOpen = xhr.open;
+                    xhr.open = function(method, url, async, username, password) {
+                      self._method = method ? method.toUpperCase() : 'GET';
+                      self._url = url;
+                      return originalOpen.call(xhr, method, url, async ?? true, username ?? null, password ?? null);
+                    };
+                    
+                    const originalSend = xhr.send;
+                    xhr.send = function(body) {
+                      self._startTime = performance.now();
+                      self._requestBody = serializeBody(body ?? null);
+                      
+                      xhr.addEventListener('loadend', function() {
+                        const duration = Math.round(performance.now() - self._startTime);
+                        
+                        if (shouldIgnoreUrl(self._url)) {
+                          return;
+                        }
+                        
+                        // 提取 URL 路径部分
+                        let urlPath = self._url;
+                        try {
+                          const urlObj = new URL(self._url, window.location.origin);
+                          urlPath = urlObj.pathname + urlObj.search + urlObj.hash;
+                        } catch (e) {
+                          // 如果解析失败，使用原始 URL
+                        }
+                        
+                        // 检测是否为流式响应
+                        const contentType = xhr.getResponseHeader('content-type') || '';
+                        const isStreamResponse = contentType.includes('text/event-stream') ||
+                                                contentType.includes('application/stream+json') ||
+                                                contentType.includes('text/plain; charset=utf-8') && self._url.includes('stream');
+                        
+                        let responseBody = '[non-text response]';
+                        if (isStreamResponse) {
+                          // 流式响应不读取 body
+                          responseBody = '[streaming response - not captured]';
+                        } else if (xhr.responseType === '' || xhr.responseType === 'text') {
+                          responseBody = truncateBody(xhr.responseText ?? '');
+                        } else if (xhr.responseType === 'json') {
+                          try {
+                            responseBody = truncateBody(JSON.stringify(xhr.response, null, 2));
+                          } catch (e) {
+                            responseBody = '[json response parse failed]';
+                          }
+                        }
+                        
+                        // 自定义breadcrumb，包含message、requestBody、responseBody、duration
+                        const xhrMessage = 'XHR ' + self._method + ' ' + urlPath + ' -> ' + xhr.status + ' (' + duration + 'ms)';
+                        
+                        Sentry.addBreadcrumb({
+                          category: 'xhr',
+                          message: xhrMessage,
+                          data: {
+                            url: self._url,
+                            method: self._method,
+                            status: xhr.status,
+                            duration: duration,
+                            requestBody: self._requestBody,
+                            responseBody: responseBody
+                          },
+                          level: xhr.status >= 400 ? 'warning' : 'info'
+                        });
+                        
+                        // 响应完成后上报，包含完整的请求和响应信息
+                        const severity = xhr.status >= 500 ? 'error' : xhr.status >= 400 ? 'warning' : 'info';
+                        const isClientError = xhr.status >= 400 && xhr.status < 500;
+                        
+                        // 如果是 4xx 错误，发送给父窗口
+                        if (isClientError) {
+                          try {
+                            const messageData = {
+                              type: 'GLOBAL_ERROR',
+                              message: xhrMessage,
+                              error: null,
+                              errorData: {
+                                name: 'HTTPClientError',
+                                message: xhrMessage,
+                                stack: null,
+                                fileName: self._url,
+                                lineNumber: 0,
+                                columnNumber: 0,
+                                httpPath: urlPath,
+                                httpStatus: xhr.status,
+                                httpMethod: self._method,
+                                requestBody: self._requestBody || '',
+                                responseBody: responseBody || ''
+                              }
+                            };
+                            // window.parent.postMessage(messageData, '*');
+                          } catch (postError) {
+                            console.error('[Monitor Plugin] Failed to send XHR 4xx error to parent:', postError);
+                          }
+                        }
+                        
+                        Sentry.captureEvent({
+                          message: xhrMessage,
+                          level: severity,
+                          fingerprint: ['{{ default }}', self._method, self._url],
+                          tags: {
+                            type: 'network'
+                          },
+                          extra: {
+                            url: self._url,
+                            method: self._method,
+                            status: xhr.status,
+                            duration: duration,
+                            requestBody: self._requestBody,
+                            responseBody: responseBody
+                          }
+                        });
+                      });
+                      
+                      return originalSend.call(xhr, body ?? null);
+                    };
+                    
+                    return xhr;
+                  }
+                  
+                  window.XMLHttpRequest = SentryXHR;
+                  
+
+                  console.log('[Monitor Plugin] Sentry initialized successfully', {
+                    dsn: 'https://e3c07b90fcb5207f333d50ac24a99d3e@sentry.miaoda.cn/233',
+                    environment: 'undefined',
+                    enableHttpMonitor: true,
+                    enableConsoleCapture: true
+                  });
+                } catch (error) {
+                  console.error('[Monitor Plugin] Failed to initialize Sentry:', error);
+                }
+              })();
+            </script>
+
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Domain and SEO Meta Tags -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="author" content="Apani Dukan" />
+    
+    <!-- Preconnect to improve performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://apanidukanakole.com" />
+    <script>
+              (function () {
+                const redirect = new URLSearchParams(location.search).get('redirect');
+                if (redirect && redirect !== location.pathname) {
+                  history.replaceState(null, '', redirect);
+                }
+              })();
+            </script>
+    <link rel="stylesheet" id="fonts-code" href="https://miaoda-font.cdn.bcebos.com/static/font_v1/fonts-code.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script id="iframe-onerror-catcher">
+              const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach((entry) => {
+                  if (entry.initiatorType === 'script' && entry.responseStatus >= 400) {
+                    window.parent.postMessage({
+                      type: "RESOURCE_LOAD_ERROR",
+                      name: entry.name,
+                      status: entry.responseStatus
+                    }, "*");
+                    console.warn('[iframe-error] Resource failed:', entry.name, entry.responseStatus);
+                  }
+                });
+              });
+              observer.observe({ type: 'resource', buffered: true });
+            </script>
+    <script id="md-click">
+              window.mdClick = e => {
+                const target = e.target;
+                const {href, target: linkTarget} = target.dataset;
+                const appType = 'web';
+                const isBlank = linkTarget === '_blank';
+
+                if (!href) return;
+
+                e.stopPropagation();
+                e.preventDefault();
+
+                // 外部链接或新窗口打开
+                if (isBlank || href.startsWith('http')) {
+                  let finalHref = href;
+                  if (appType === 'miniapp' && !href.startsWith('http')) {
+                    finalHref = window.location.href.split('#')[0] + '#/' + href;
+                  }
+                  window.open(finalHref, linkTarget || '_self');
+                  return;
+                }
+
+                // 内部路由跳转
+                const finalHref = href.startsWith('/') ? href : '/' + href;
+                if (appType === 'miniapp') {
+                  window.location.hash = finalHref;
+                  window.dispatchEvent(new HashChangeEvent('hashchange'));
+                } else {
+                  window.history.pushState({}, '', finalHref);
+                  window.dispatchEvent(new Event('popstate'));
+                }
+              };
+              document.addEventListener('click', window.mdClick, true);
+            </script>
+    <script type="module" src="/@id/virtual:after-update"></script>
+  </body>
+</html>

@@ -1,0 +1,283 @@
+{
+  "products": [
+    {
+      "id": "val-001",
+      "festival": "Valentine's Day",
+      "name": "Heart Shape Gift Box",
+      "description": "Beautiful red heart-shaped gift box perfect for expressing your love",
+      "price": 499,
+      "category": "Romantic Gifts",
+      "emoji": "💝",
+      "keywords": ["valentine", "love", "romantic", "heart", "gift box"]
+    },
+    {
+      "id": "val-002",
+      "festival": "Valentine's Day",
+      "name": "Teddy Bear with Rose",
+      "description": "Adorable teddy bear holding a red rose, a classic romantic gift",
+      "price": 699,
+      "category": "Romantic Gifts",
+      "emoji": "🧸",
+      "keywords": ["valentine", "teddy", "rose", "romantic", "cute"]
+    },
+    {
+      "id": "val-003",
+      "festival": "Valentine's Day",
+      "name": "Chocolate Love Combo",
+      "description": "Premium assorted chocolates in elegant packaging",
+      "price": 899,
+      "category": "Romantic Gifts",
+      "emoji": "🍫",
+      "keywords": ["valentine", "chocolate", "sweet", "romantic", "premium"]
+    },
+    {
+      "id": "val-004",
+      "festival": "Valentine's Day",
+      "name": "Love Message Bottle",
+      "description": "Romantic message in a decorative glass bottle",
+      "price": 299,
+      "category": "Romantic Gifts",
+      "emoji": "💌",
+      "keywords": ["valentine", "message", "romantic", "unique", "affordable"]
+    },
+    {
+      "id": "val-005",
+      "festival": "Valentine's Day",
+      "name": "Premium Valentine Hamper",
+      "description": "Luxury gift hamper with chocolates, flowers, and romantic items",
+      "price": 1499,
+      "category": "Romantic Gifts",
+      "emoji": "🎁",
+      "keywords": ["valentine", "hamper", "luxury", "premium", "complete"]
+    },
+    {
+      "id": "val-006",
+      "festival": "Valentine's Day",
+      "name": "Scented Candle Set",
+      "description": "Romantic scented candles for a perfect ambiance",
+      "price": 599,
+      "category": "Romantic Gifts",
+      "emoji": "🕯️",
+      "keywords": ["valentine", "candle", "romantic", "ambiance", "scented"]
+    },
+    {
+      "id": "diw-001",
+      "festival": "Diwali",
+      "name": "Decorative Diyas",
+      "description": "Beautiful traditional oil lamps to brighten your Diwali celebrations",
+      "price": 299,
+      "category": "Festival Decorations",
+      "emoji": "🪔",
+      "keywords": ["diwali", "diya", "traditional", "decoration", "lights"]
+    },
+    {
+      "id": "diw-002",
+      "festival": "Diwali",
+      "name": "Diwali Gift Hamper",
+      "description": "Premium hamper with sweets, dry fruits, and festive items",
+      "price": 999,
+      "category": "Festival Gifts",
+      "emoji": "🎁",
+      "keywords": ["diwali", "hamper", "sweets", "dry fruits", "premium"]
+    },
+    {
+      "id": "diw-003",
+      "festival": "Diwali",
+      "name": "LED Light Series",
+      "description": "Colorful LED fairy lights for beautiful Diwali decoration",
+      "price": 499,
+      "category": "Festival Decorations",
+      "emoji": "💡",
+      "keywords": ["diwali", "lights", "led", "decoration", "colorful"]
+    },
+    {
+      "id": "diw-004",
+      "festival": "Diwali",
+      "name": "Sweets Box",
+      "description": "Assorted traditional Indian sweets in elegant packaging",
+      "price": 799,
+      "category": "Festival Food",
+      "emoji": "🍬",
+      "keywords": ["diwali", "sweets", "mithai", "traditional", "food"]
+    },
+    {
+      "id": "diw-005",
+      "festival": "Diwali",
+      "name": "Lakshmi-Ganesh Frame",
+      "description": "Golden photo frame with Lakshmi-Ganesh for prosperity",
+      "price": 1199,
+      "category": "Religious Items",
+      "emoji": "🖼️",
+      "keywords": ["diwali", "lakshmi", "ganesh", "religious", "frame"]
+    },
+    {
+      "id": "rak-001",
+      "festival": "Raksha Bandhan",
+      "name": "Designer Rakhis",
+      "description": "Beautiful handcrafted rakhis with traditional and modern designs",
+      "price": 199,
+      "category": "Rakhi",
+      "emoji": "🎀",
+      "keywords": ["rakhi", "raksha bandhan", "brother", "sister", "traditional"]
+    },
+    {
+      "id": "rak-002",
+      "festival": "Raksha Bandhan",
+      "name": "Rakhi + Chocolate Combo",
+      "description": "Perfect combo of designer rakhi with premium chocolates",
+      "price": 499,
+      "category": "Rakhi Combo",
+      "emoji": "🎁",
+      "keywords": ["rakhi", "chocolate", "combo", "brother", "gift"]
+    },
+    {
+      "id": "rak-003",
+      "festival": "Raksha Bandhan",
+      "name": "Premium Rakhi Gift Box",
+      "description": "Elegant gift box with rakhi, sweets, and traditional items",
+      "price": 999,
+      "category": "Rakhi Combo",
+      "emoji": "🎁",
+      "keywords": ["rakhi", "premium", "gift box", "complete", "traditional"]
+    },
+    {
+      "id": "bir-001",
+      "festival": "Birthdays",
+      "name": "Birthday Decoration Kit",
+      "description": "Complete decoration set with balloons, banners, and party supplies",
+      "price": 799,
+      "category": "Party Supplies",
+      "emoji": "🎈",
+      "keywords": ["birthday", "decoration", "party", "balloons", "celebration"]
+    },
+    {
+      "id": "bir-002",
+      "festival": "Birthdays",
+      "name": "Photo Frame Gift",
+      "description": "Personalized photo frame to capture precious birthday memories",
+      "price": 499,
+      "category": "Personalized Gifts",
+      "emoji": "🖼️",
+      "keywords": ["birthday", "photo frame", "personalized", "memories", "gift"]
+    },
+    {
+      "id": "bir-003",
+      "festival": "Birthdays",
+      "name": "Surprise Gift Box",
+      "description": "Exciting surprise box filled with birthday treats and gifts",
+      "price": 1299,
+      "category": "Gift Boxes",
+      "emoji": "🎁",
+      "keywords": ["birthday", "surprise", "gift box", "treats", "special"]
+    },
+    {
+      "id": "gan-001",
+      "festival": "Ganesh Chaturthi",
+      "name": "Eco-friendly Ganpati Idol",
+      "description": "Beautiful clay Ganesh idol, environment-friendly and traditional",
+      "price": 899,
+      "category": "Religious Items",
+      "emoji": "🐘",
+      "keywords": ["ganesh", "ganpati", "idol", "eco-friendly", "clay"]
+    },
+    {
+      "id": "gan-002",
+      "festival": "Ganesh Chaturthi",
+      "name": "Puja Samagri Kit",
+      "description": "Complete puja items kit for Ganesh Chaturthi rituals",
+      "price": 599,
+      "category": "Religious Items",
+      "emoji": "🙏",
+      "keywords": ["ganesh", "puja", "samagri", "ritual", "religious"]
+    },
+    {
+      "id": "gan-003",
+      "festival": "Ganesh Chaturthi",
+      "name": "Ganpati Decoration Set",
+      "description": "Beautiful decoration set with flowers and backdrop for Ganpati",
+      "price": 1499,
+      "category": "Festival Decorations",
+      "emoji": "🌺",
+      "keywords": ["ganesh", "decoration", "flowers", "backdrop", "festive"]
+    },
+    {
+      "id": "hol-001",
+      "festival": "Holi",
+      "name": "Organic Color Pack",
+      "description": "Safe and eco-friendly gulal colors for vibrant Holi celebrations",
+      "price": 399,
+      "category": "Festival Items",
+      "emoji": "🎨",
+      "keywords": ["holi", "colors", "gulal", "organic", "safe"]
+    },
+    {
+      "id": "hol-002",
+      "festival": "Holi",
+      "name": "Holi Celebration Combo",
+      "description": "Complete Holi kit with colors, water guns, and party supplies",
+      "price": 999,
+      "category": "Festival Combo",
+      "emoji": "🎉",
+      "keywords": ["holi", "combo", "complete", "celebration", "party"]
+    },
+    {
+      "id": "hol-003",
+      "festival": "Holi",
+      "name": "Water Gun (Pichkari) Set",
+      "description": "Colorful and fun water guns for exciting Holi celebrations",
+      "price": 299,
+      "category": "Festival Items",
+      "emoji": "🔫",
+      "keywords": ["holi", "pichkari", "water gun", "fun", "colorful"]
+    }
+  ],
+  "festivals": [
+    {
+      "name": "Diwali",
+      "emoji": "🪔",
+      "description": "Festival of Lights",
+      "season": "October-November"
+    },
+    {
+      "name": "Valentine's Day",
+      "emoji": "❤️",
+      "description": "Celebration of Love",
+      "season": "February"
+    },
+    {
+      "name": "Raksha Bandhan",
+      "emoji": "🎀",
+      "description": "Bond between Siblings",
+      "season": "August"
+    },
+    {
+      "name": "Birthdays",
+      "emoji": "🎂",
+      "description": "Special Day Celebrations",
+      "season": "Year-round"
+    },
+    {
+      "name": "Ganesh Chaturthi",
+      "emoji": "🐘",
+      "description": "Lord Ganesha's Birthday",
+      "season": "August-September"
+    },
+    {
+      "name": "Holi",
+      "emoji": "🎨",
+      "description": "Festival of Colors",
+      "season": "March"
+    }
+  ],
+  "storeInfo": {
+    "name": "Apani Dukan",
+    "tagline": "Aapli Aapli, Apani Dukan",
+    "address": "Mahalaxmi Mathuranagar Colony, Akole, Maharashtra – 422601",
+    "phone": "+919876543210",
+    "whatsapp": "919876543210",
+    "hours": {
+      "weekdays": "9:00 AM - 8:00 PM",
+      "sunday": "10:00 AM - 6:00 PM"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+# Netlify/Vercel redirects for SPA
+/*    /index.html   200
+
+# Force HTTPS
+http://apanidukanakole.com/*  https://apanidukanakole.com/:splat  301!
+http://www.apanidukanakole.com/*  https://apanidukanakole.com/:splat  301!
+https://www.apanidukanakole.com/*  https://apanidukanakole.com/:splat  301!

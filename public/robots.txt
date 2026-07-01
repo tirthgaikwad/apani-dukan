@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://apanidukanakole.com/sitemap.xml
+
+# Disallow admin or private paths (if any in future)
+# Disallow: /admin/
