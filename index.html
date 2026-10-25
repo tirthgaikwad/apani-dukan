@@ -2,10 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="images/apani.png " />
-    <link rel="icon" href="images/apani.png ">
-    <link rel="shortcut icon" href="images/apani.png ">
-    <link rel="apple-touch-icon" href="images/apani.png ">
+    <link rel="icon" type="image/png" href="/images/apani.png" />
+    <link rel="shortcut icon" href="/images/apani.png" />
+    <link rel="apple-touch-icon" href="/images/apani.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Domain and SEO Meta Tags -->
@@ -19,6 +18,17 @@
     
     <!-- DNS Prefetch -->
     <link rel="dns-prefetch" href="https://apanidukanakole.com" />
+
+    <!-- SPA Redirect restoration for static hosts / GitHub Pages -->
+    <script>
+      (function() {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,7 +1,7 @@
-# Netlify/Vercel redirects for SPA
-/*    /index.html   200
-
-# Force HTTPS
+# Force HTTPS and canonical domain (must precede catch-all)
 http://apanidukanakole.com/*  https://apanidukanakole.com/:splat  301!
 http://www.apanidukanakole.com/*  https://apanidukanakole.com/:splat  301!
 https://www.apanidukanakole.com/*  https://apanidukanakole.com/:splat  301!
+
+# Netlify SPA fallback redirect
+/*    /index.html   200
